@@ -1,3 +1,3 @@
-#### CS362 Project Folder
-## Student: grantjo
+## CS362 Project Folder
+#### Student: grantjo
 ---
