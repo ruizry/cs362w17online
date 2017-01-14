@@ -1,1 +1,0 @@
-Grant Hatchimonji's repository.
