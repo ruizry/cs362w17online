@@ -669,6 +669,19 @@ int adventurerCard(int currentPlayer, struct gameState *state, int drawntreasure
 	}
 }
 
+int remodelCard(int currentPlayer, int choice1, int choice2, struct gameState *state, int handPos){
+	int j = state->hand[currentPlayer[choice1];
+	if((getCost(state->hand[currentPlayer][choice1] + 2) > getCost(choice2)) return -1;
+	gainCard(choice2, state, 0, currentPlayer);
+	discardCard(handPos, currentPlayer, state, 0);
+	for(int i = 0; i < j; i++){
+		if(state->hand[currentPlayer][i] == j){
+			discardCard(j, currentPlayer, state, 0);
+			break;
+		}
+	}
+}
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
   int i;
@@ -831,7 +844,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 			
     case remodel:
-      j = state->hand[currentPlayer][choice1];  //store card we will trash
+		remodelCard(currentPlayer, choice1, choice2, state, handPos);
+		return 0;
+/**      j = state->hand[currentPlayer][choice1];  //store card we will trash
 
       if ( (getCost(state->hand[currentPlayer][choice1]) + 2) > getCost(choice2) )
 	{
@@ -855,6 +870,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 
       return 0;
+**/
 		
     case smithy:
 		smithyCard(currentPlayer, state, handPos)
