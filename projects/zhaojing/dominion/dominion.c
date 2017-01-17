@@ -688,6 +688,25 @@ int villageCard(int currentPlayer, struct gameState *state, int handPos){
 	discardCard(handPos, currentPlayer, state, 0);
 }
 
+int minionCard(int currentPlayer, struct gameState *state, int choice1, int choice2, int handPos){
+	state->numActions++;
+	discardCard(handPos,currentPlayer, state, 0);
+	if(choice1){
+		while(numHandCards(state) > 0)
+			discardCard(handPos, currentPlayer, state, 0)
+	}
+	else if(choice2) state->coins = state-> coins + 3;
+	for(int i = 0; i < state->numPlayers; i++){
+		if(i != currentPlayer){
+			if(state->handCount[i] > 3){
+				while(state->handCount[i] > 1)
+					discardCard(handPos, i, state, 0);
+			}
+			for(int j = 0; j < 3; j++) drawCard(i, state);
+		}
+	}
+}
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
   int i;
@@ -974,7 +993,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case minion:
-      //+1 action
+ 		minionCard(currentPlayer, state, choice1, choice2, handPos);
+		return 0;
+/**      //+1 action
       state->numActions++;
 			
       //discard card from hand
@@ -1023,7 +1044,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 				
 	}
       return 0;
-		
+**/
     case steward:
       if (choice1 == 1)
 	{
