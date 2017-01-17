@@ -650,10 +650,6 @@ int playAdventurer(struct gameState *state){
 	int drawntreasure,z = 0;
 	
 	while(drawntreasure<2){
-		//if the deck is empty we need to shuffle discard and add to deck
-		if (state->deckCount[currentPlayer] <1){
-			shuffle(currentPlayer, state);
-		}
 		drawCard(currentPlayer, state);
 		cardDrawn = state->hand[currentPlayer]
 			[state->handCount[currentPlayer]-1];
@@ -664,7 +660,6 @@ int playAdventurer(struct gameState *state){
 			temphand[z]=cardDrawn;
 			//this should just remove the top card (the most recently drawn one).
 			state->handCount[currentPlayer]--; 
-			z++;
 		}
     }
     while(z-1>=0){
@@ -682,11 +677,9 @@ int playSmithy(struct gameState *state, int handPos){
 	//+3 Cards
 	int i;
 	for (i = 0; i < 3; i++){
-	  drawCard(currentPlayer, state);
+	  drawCard(currentPlayer+i, state);
 	}
-		
-    //discard card from hand
-    discardCard(handPos, currentPlayer, state, 0);
+	
     return 0;
 }
 
@@ -700,6 +693,7 @@ int playVillage(struct gameState *state, int handPos){
 		
     //discard played card from hand
     discardCard(handPos, currentPlayer, state, 0);
+	state->whoseTurn++;
     return 0;
 }
 
@@ -776,7 +770,7 @@ int playCouncil_Room(struct gameState *state, int handPos){
     state->numBuys++;
 	
     //Each other player draws a card
-    for (i = 0; i < state->numPlayers; i++){
+    for (i = 0; i < state->handCount[currentPlayer]; i++){
 	  if ( i != currentPlayer ){
 	      drawCard(i, state);
 	    }
