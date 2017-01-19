@@ -664,7 +664,7 @@ int playAdventurer(struct gameState *state) {
     } else {
       //drawn card is not treasure, add to temp hand to discard at end of turn.
       temphand[z]=cardDrawn;
-      state->handCount[currentPlayer]--;
+      state->handCount[currentPlayer]++;
       z++;
     }
   }
@@ -678,9 +678,10 @@ int playAdventurer(struct gameState *state) {
 
 //smithy function
 int playSmithy(struct gameState *state, int handPos) {
+    int i;
   //get current player
   int currentPlayer = whoseTurn(state);
-  for (int i = 0; i < 3; i++) {
+  for (i = 0; i < 3; i++) {
     drawCard(currentPlayer, state);
   }
   //discard smithy card now that it has been used.
@@ -701,7 +702,7 @@ int playCouncil_Room(struct gameState *state, int handPos) {
   state->numBuys = 1;
 
   //each other player draws a card
-  for (i = 0; i < state->numPlayers; i++) {
+  for (i = 0; i < state->numPlayers-1; i++) {
     if (i != currentPlayer) {
       drawCard(i, state);
     }
@@ -785,16 +786,16 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   int i;
   int j;
   int k;
-  int x;
+  //int x;
   int index;
   int currentPlayer = whoseTurn(state);
   int nextPlayer = currentPlayer + 1;
 
   int tributeRevealedCards[2] = {-1, -1};
-  int temphand[MAX_HAND];// moved above the if statement
-  int drawntreasure=0;
-  int cardDrawn;
-  int z = 0;// this is the counter for the temp hand
+  //int temphand[MAX_HAND];// moved above the if statement
+  //int drawntreasure=0;
+  //int cardDrawn;
+  //int z = 0;// this is the counter for the temp hand
   if (nextPlayer > (state->numPlayers - 1)){
     nextPlayer = 0;
   }
