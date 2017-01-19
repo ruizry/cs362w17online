@@ -680,6 +680,18 @@ int smithyCall(int i, int handPos, int currentPlayer, struct gameState *state){
    return 0;
 
 }
+
+int villageCall(int currentPlayer, struct gameState *state, int handPos){
+	 //+1 Card
+	 drawCard(currentPlayer, state);
+
+	 //+2 Actions
+	 state->numActions = state->numActions + 2;
+	 state->numActions = state->numActions + 2;
+	 //discard played card from hand
+	 discardCard(handPos, currentPlayer, state, 0);
+	 return 0;
+}
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
    int i;
@@ -848,19 +860,20 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	 return 0;
 
       case smithy:
-	return smithyCall(i, handPos, currentPlayer, state);
+	 return smithyCall(i, handPos, currentPlayer, state);
 	 /*//+3 Cards
-	 for (i = 0; i < 3; i++)
-	 {
-	    drawCard(currentPlayer, state);
-	 }
+	   for (i = 0; i < 3; i++)
+	   {
+	   drawCard(currentPlayer, state);
+	   }
 
 	 //discard card from hand
 	 discardCard(handPos, currentPlayer, state, 0);
 	 return 0;
-*/
+	 */
       case village:
-	 //+1 Card
+	return villageCall(currentPlayer, state, handPos);
+	 /* //+1 Card
 	 drawCard(currentPlayer, state);
 
 	 //+2 Actions
@@ -869,7 +882,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	 //discard played card from hand
 	 discardCard(handPos, currentPlayer, state, 0);
 	 return 0;
-
+*/
       case baron:
 	 state->numBuys++;//Increase buys by 1!
 	 if (choice1 > 0){//Boolean true or going to discard an estate
