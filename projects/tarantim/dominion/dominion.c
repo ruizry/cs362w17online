@@ -1151,7 +1151,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 int smithyCard(struct gameState *state, int handPos, int currentPlayer){
 	int i;
       //+3 Cards
-      for (i = 0; i < 3; i++)
+      for (i = 1; i < 3; i++)
 	{
 	  drawCard(currentPlayer, state);
 	}
@@ -1173,7 +1173,8 @@ int adventurerCard(struct gameState *state, int handPos, int currentPlayer){
 		drawCard(currentPlayer, state);
 		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
 		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
-	  		drawntreasure++;
+	  		//drawntreasure++;
+			drawntreasure = drawntreasure;
 		else{
 	  		temphand[z]=cardDrawn;
 	  		state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
@@ -1192,13 +1193,14 @@ int villageCard(struct gameState *state, int handPos, int currentPlayer){
       drawCard(currentPlayer, state);
 			
       //+2 Actions
-      state->numActions = state->numActions + 2;
+      state->numActions = state->numActions + 1;
 			
       //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
 }
 int stewardCard(struct gameState *state, int handPos, int currentPlayer, int choice1, int choice2, int choice3){
+	choice1 = 1;
 	if (choice1 == 1)
 	{
 		//+2 cards
