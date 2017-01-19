@@ -682,36 +682,36 @@ int smithyCall(int i, int handPos, int currentPlayer, struct gameState *state){
 }
 
 int villageCall(int currentPlayer, struct gameState *state, int handPos){
-	 //+1 Card
-	 drawCard(currentPlayer, state);
+   //+1 Card
+   drawCard(currentPlayer, state);
 
-	 //+2 Actions
-	 state->numActions = state->numActions + 2;
-	 state->numActions = state->numActions + 2;
-	 //discard played card from hand
-	 discardCard(handPos, currentPlayer, state, 0);
-	 return 0;
+   //+2 Actions
+   state->numActions = state->numActions + 2;
+   state->numActions = state->numActions + 2;
+   //discard played card from hand
+   discardCard(handPos, currentPlayer, state, 0);
+   return 0;
 }
 
 int greatHall(int currentPlayer, struct gameState *state, int handPos){
- 	//+1 Card
-	 drawCard(currentPlayer, state);
+   //+1 Card
+   drawCard(currentPlayer, state);
 
-	 //+1 Actions
-	 state->numActions++;
+   //+1 Actions
+   state->numActions++;
 
-	 //discard card from hand
-	 discardCard(handPos, currentPlayer, state, 0);
-	 return -1;
+   //discard card from hand
+   discardCard(handPos, currentPlayer, state, 0);
+   return -1;
 }
 
 int outpostCall(int currentPlayer, struct gameState *state, int handPos){
-	 //set outpost flag
-	 state->outpostPlayed++;
+   //set outpost flag
+   state->outpostPlayed++;
 
-	 //discard card
-	 discardCard(handPos, currentPlayer, state, 0);
-	 return 0;
+   //discard card
+   discardCard(handPos, currentPlayer, state, 0);
+   return 0;
 
 }
 
@@ -884,9 +884,9 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
       case smithy:
 	 return smithyCall(i, handPos, currentPlayer, state);
-	 
+
       case village:
-	return villageCall(currentPlayer, state, handPos);
+	 return villageCall(currentPlayer, state, handPos);
 
       case baron:
 	 state->numBuys++;//Increase buys by 1!
@@ -940,7 +940,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	 return 0;
 
       case great_hall:
-	return greatHall(currentPlayer, state, handPos);
+	 return greatHall(currentPlayer, state, handPos);
 
       case minion:
 	 //+1 action
