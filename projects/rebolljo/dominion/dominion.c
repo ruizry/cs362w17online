@@ -792,7 +792,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
-      //+3 Cards
+    
       callSmithy(currentPlayer, state, handPos);
 		
     case village:
@@ -1196,7 +1196,7 @@ int callCouncilRoom(int currentPlayer, struct gameState *state, int handPos)
       
     //put played card in played card pile
     discardCard(handPos, currentPlayer, state, 0);
-    
+
     return 0;
 }
 
