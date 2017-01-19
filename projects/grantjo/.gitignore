@@ -1,12 +1,12 @@
 dominion/player
-dominion/player.exe
 dominion/test
-dominion/test.exe
 dominion/playdom
-dominion/playdom.exe
 dominion/testInit
-dominion/testInit.exe
 dominion/*.gcov
 dominion/*.gcda
 dominion/*.gcno
 dominion/*.so
+dominion/*.exe
+dominion/badTestDrawCard
+dominion/testDrawCard
+dominion/*.o
