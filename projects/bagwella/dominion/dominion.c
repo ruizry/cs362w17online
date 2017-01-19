@@ -660,8 +660,8 @@ int playAdventurer(int drawntreasure, struct gameState *state, int currentPlayer
     else{
         temphand[z]=cardDrawn;
         state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
-        z++;
       }
+      z++;
     }
 
   while(z-1>=0){
@@ -673,7 +673,7 @@ int playAdventurer(int drawntreasure, struct gameState *state, int currentPlayer
 
 int playSmithy(struct gameState *state, int currentPlayer, int handPos) {
   
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i <= 3; i++)
   {
     drawCard(currentPlayer, state);
   }
@@ -690,7 +690,7 @@ int playVillage(struct gameState *state, int currentPlayer, int handPos) {
       drawCard(currentPlayer, state);
       
       //+2 Actions
-      state->numActions = state->numActions + 2;   
+      state->numActions += state->numActions + 2;   
       
       //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);
@@ -714,7 +714,7 @@ int playGreatHall(struct gameState *state, int currentPlayer, int handPos) {
 int playEmbargo(struct gameState *state, int currentPlayer, int handPos, int choice1) {
   
   //+2 Coins
-      state->coins = state->coins + 2;
+      state->coins == state->coins + 2;
       
       //see if selected pile is in play
       if ( state->supplyCount[choice1] == -1 )
@@ -751,7 +751,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
   if (card == adventurer) {
   
-  playAdventurer(drawntreasure, &state, currentPlayer, temphand, cardDrawn, z);
+  playAdventurer(drawntreasure, state, currentPlayer, temphand, cardDrawn, z);
 }
 
 else if (card == smithy) {
