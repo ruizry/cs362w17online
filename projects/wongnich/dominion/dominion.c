@@ -705,6 +705,16 @@ int greatHall(int currentPlayer, struct gameState *state, int handPos){
 	 return -1;
 }
 
+int outpostCall(int currentPlayer, struct gameState *state, int handPos){
+	 //set outpost flag
+	 state->outpostPlayed++;
+
+	 //discard card
+	 discardCard(handPos, currentPlayer, state, 0);
+	 return 0;
+
+}
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
    int i;
@@ -874,28 +884,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
       case smithy:
 	 return smithyCall(i, handPos, currentPlayer, state);
-	 /*//+3 Cards
-	   for (i = 0; i < 3; i++)
-	   {
-	   drawCard(currentPlayer, state);
-	   }
-
-	 //discard card from hand
-	 discardCard(handPos, currentPlayer, state, 0);
-	 return 0;
-	 */
+	 
       case village:
 	return villageCall(currentPlayer, state, handPos);
-	 /* //+1 Card
-	 drawCard(currentPlayer, state);
 
-	 //+2 Actions
-	 state->numActions = state->numActions + 2;
-
-	 //discard played card from hand
-	 discardCard(handPos, currentPlayer, state, 0);
-	 return 0;
-*/
       case baron:
 	 state->numBuys++;//Increase buys by 1!
 	 if (choice1 > 0){//Boolean true or going to discard an estate
@@ -949,16 +941,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
       case great_hall:
 	return greatHall(currentPlayer, state, handPos);
-	 /* //+1 Card
-	 drawCard(currentPlayer, state);
 
-	 //+1 Actions
-	 state->numActions++;
-
-	 //discard card from hand
-	 discardCard(handPos, currentPlayer, state, 0);
-	 return 0;
-*/
       case minion:
 	 //+1 action
 	 state->numActions++;
@@ -1203,12 +1186,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	 return 0;
 
       case outpost:
-	 //set outpost flag
-	 state->outpostPlayed++;
-
-	 //discard card
-	 discardCard(handPos, currentPlayer, state, 0);
-	 return 0;
+	 outpostCall(currentPlayer, state, handPos);
 
       case salvager:
 	 //+1 buy
