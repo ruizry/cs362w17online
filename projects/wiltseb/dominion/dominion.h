@@ -144,5 +144,8 @@ int playSteward(struct gameState* state, int currentPlayer, int handPos, int cho
 /*Plays Steward Card Effect*/
 int playRemodel(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2);
 /*Play Remodel Card Effect*/
+int playMine(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2);
+/*Play Mine Card Effect*/
+
 
 #endif
