@@ -71,6 +71,8 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed, struct 
   //initialize supply
   ///////////////////////////////
 
+  // TODO: convert curse logic to calculation based on numPlayers
+
   //set number of Curse cards
   if (numPlayers == 2)
   {
@@ -84,6 +86,8 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed, struct 
   {
     state->supplyCount[curse] = 30;
   }
+
+  // TODO: convert victory card assignment to result of 8 + (2 * (numPlayers - 2))
 
   //set number of Victory cards
   if (numPlayers == 2)
@@ -112,6 +116,9 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed, struct 
       if (kingdomCards[j] == i)
       {
         //check if card is a 'Victory' Kingdom card
+
+        // TODO: convert victory card assignment to result of 8 + (2 * (numPlayers - 2))
+        
         if (kingdomCards[j] == great_hall || kingdomCards[j] == gardens)
         {
           if (numPlayers == 2)
@@ -214,6 +221,7 @@ int shuffle(int player, struct gameState *state)
 
   if (state->deckCount[player] < 1)
     return -1;
+
   qsort((void *)(state->deck[player]), state->deckCount[player], sizeof(int), compare);
   /* SORT CARDS IN DECK TO ENSURE DETERMINISM! */
 
@@ -228,6 +236,7 @@ int shuffle(int player, struct gameState *state)
     }
     state->deckCount[player]--;
   }
+
   for (i = 0; i < newDeckPos; i++)
   {
     state->deck[player][i] = newDeck[i];
@@ -263,6 +272,8 @@ int playCard(int handPos, int choice1, int choice2, int choice3, struct gameStat
     return -1;
   }
 
+  // TODO: update unnecessary logic checks using !<return value> instead of the < 0 comparison
+  
   //play card
   if (cardEffect(card, choice1, choice2, choice3, state, handPos, &coin_bonus) < 0)
   {
@@ -294,18 +305,21 @@ int buyCard(int supplyPos, struct gameState *state)
   {
     if (DEBUG)
       printf("You do not have any buys left\n");
+
     return -1;
   }
   else if (supplyCount(supplyPos, state) < 1)
   {
     if (DEBUG)
       printf("There are not any of that type of card left\n");
+
     return -1;
   }
   else if (state->coins < getCost(supplyPos))
   {
     if (DEBUG)
       printf("You do not have enough money to buy that. You have %d coins.\n", state->coins);
+
     return -1;
   }
   else
@@ -316,6 +330,7 @@ int buyCard(int supplyPos, struct gameState *state)
 
     state->coins = (state->coins) - (getCost(supplyPos));
     state->numBuys--;
+
     if (DEBUG)
       printf("You bought card number %d for %d coins. You now have %d buys and %d coins.\n", supplyPos, getCost(supplyPos), state->numBuys, state->coins);
   }
@@ -445,6 +460,8 @@ int isGameOver(struct gameState *state)
 
   return 0;
 }
+
+// TODO: replace convoluted if statements with calculations using fullDeckCount
 
 int scoreFor(int player, struct gameState *state)
 {
@@ -620,6 +637,7 @@ int drawCard(int player, struct gameState *state)
     //Step 1 Shuffle the discard pile back into a deck
     int i;
     //Move discard to deck
+    // TODO: consider using pointer to just swap discard and deck when deck empty
     for (i = 0; i < state->discardCount[player]; i++)
     {
       state->deck[player][i] = state->discard[player][i];
@@ -637,6 +655,7 @@ int drawCard(int player, struct gameState *state)
       printf("Deck count now: %d\n", state->deckCount[player]);
     }
 
+    // TODO: verify if this statement is really necessary
     state->discardCount[player] = 0;
 
     //Step 2 Draw Card
@@ -656,7 +675,6 @@ int drawCard(int player, struct gameState *state)
     state->deckCount[player]--;
     state->handCount[player]++; //Increment hand count
   }
-
   else
   {
     int count = state->handCount[player]; //Get current hand count for player
@@ -753,6 +771,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   int drawntreasure = 0;
   int cardDrawn;
   int z = 0; // this is the counter for the temp hand
+
+  // wrap around next player when more than numPlayers
   if (nextPlayer > (state->numPlayers - 1))
   {
     nextPlayer = 0;
