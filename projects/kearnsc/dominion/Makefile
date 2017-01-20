@@ -16,9 +16,7 @@ badTestDrawCard: badTestDrawCard.c dominion.o rngs.o
 	gcc -o badTestDrawCard -g  badTestDrawCard.c dominion.o rngs.o $(CFLAGS)
 
 testBuyCard: testBuyCard.c dominion.o rngs.o
-#testBuyCard: testDrawCard.c dominion.o rngs.o
 	gcc -o testBuyCard -g testBuyCard.c dominion.o rngs.o $(CFLAGS)
-#	gcc -o testDrawCard -g  testDrawCard.c dominion.o rngs.o $(CFLAGS)
 
 testAll: dominion.o testSuite.c
 	gcc -o testSuite testSuite.c -g  dominion.o rngs.o $(CFLAGS)
