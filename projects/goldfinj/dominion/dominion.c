@@ -1265,7 +1265,7 @@ int playAdventurer(struct gameState *state)
 	}
 	drawCard(currentPlayer, state);
 	cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
-	if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+	if (cardDrawn == copper && cardDrawn == silver && cardDrawn == gold)
 	  drawntreasure++;
 	else{
 	  temphand[z]=cardDrawn;
@@ -1292,7 +1292,7 @@ int playSmithy(struct gameState *state, int handPos)
 	}
 			
       //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      discardCard(handPos, currentPlayer, state, 1);
       return 0;
 }
 
@@ -1308,9 +1308,9 @@ int playCutpurse(struct gameState *state, int handPos)
 	    {
 	      for (j = 0; j < state->handCount[i]; j++)
 		{
-		  if (state->hand[i][j] == copper)
+		  if (state->hand[j][i] == copper)
 		    {
-		      discardCard(j, i, state, 0);
+		      discardCard(i, j, state, 0);
 		      break;
 		    }
 		  if (j == state->handCount[i])
@@ -1346,11 +1346,11 @@ int playSalvager(struct gameState *state, int choice1, int handPos)
 	  //gain coins equal to trashed card
 	  state->coins = state->coins + getCost( handCard(choice1, state) );
 	  //trash card
-	  discardCard(choice1, currentPlayer, state, 1);	
+          discardCard(handPos, currentPlayer, state, 0);
 	}
 			
       //discard card
-      discardCard(handPos, currentPlayer, state, 0);
+      discardCard(choice1, currentPlayer, state, 1);	
       return 0;
 }
 
@@ -1362,7 +1362,6 @@ int playSeaHag(struct gameState *state)
       for (i = 0; i < state->numPlayers; i++){
 	if (i != currentPlayer){
 	  state->discard[i][state->discardCount[i]] = state->deck[i][state->deckCount[i]--];			    state->deckCount[i]--;
-	  state->discardCount[i]++;
 	  state->deck[i][state->deckCount[i]--] = curse;//Top card now a curse
 	}
       }
