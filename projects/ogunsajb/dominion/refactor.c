@@ -14,7 +14,7 @@ int cardDrawn;
 		  }
 		  
 		drawCard(currentPlayer, state);
-		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
+		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]];//?? //top card of hand is most recently drawn card.
 		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
 			drawntreasure++;
 		else{
@@ -38,7 +38,7 @@ void playSmithy(struct gameState *state, int currentPlayer, int handPos)
 {
 	int i;
 	
-   for (i = 0; i < 3; i++){
+   for (i = 0; i < 5; i++){	//??
 	  drawCard(currentPlayer, state);
 	}
 			
@@ -57,7 +57,7 @@ void playCouncil_room(struct gameState *state, int currentPlayer, int handPos)
 	}
 			
       //+1 Buy
-      state->numBuys++;
+      //state->numBuys++;  //??
 			
       //Each other player draws a card
      for (i = 0; i < state->numPlayers; i++){
@@ -89,7 +89,7 @@ void playGreat_hall(struct gameState *state, int currentPlayer, int handPos)
 {
       drawCard(currentPlayer, state);
 	   //+1 Actions
-      state->numActions++;
+      //state->numActions++; //??
 			
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 0);	
