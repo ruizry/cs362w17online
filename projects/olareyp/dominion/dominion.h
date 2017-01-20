@@ -136,5 +136,8 @@ int playVillage(struct gameState *state, int handPos);
 int playFeast(struct gameState *state, int choice1);
 int playCouncil_Room(struct gameState *state, int handPos);
 
+//Refactored card effects
+int effectSmithy(int currentPlayer, struct gameState *state, int handPos);
+int effectAdventurer(int drawntreasure, struct gameState *state, int currentPlayer, int cardDrawn, int temphand[], int z);
 
 #endif
