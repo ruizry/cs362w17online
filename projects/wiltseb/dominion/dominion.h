@@ -137,11 +137,12 @@ int playFeast(struct gameState *state, int choice1);
 int playCouncil_Room(struct gameState *state, int handPos);
 
 int playSmithy(struct gameState* state, int handPos, int currentPlayer);
-/*Plays Smithy card*/
+/*Plays Smithy Card Effect*/
 int playAdventurer(struct gameState* state, int currentPlayer, int* cardDrawn, int* drawntreasure, int* temphand, int* z);
-/*Plays Adventurer Card*/
+/*Plays Adventurer Card Effect*/
 int playSteward(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2, int choice3);
-/*Plays Steward Card*/
-
+/*Plays Steward Card Effect*/
+int playRemodel(struct gameState* state, int currentPlayer, int handPos, int choice1, int choice2);
+/*Play Remodel Card Effect*/
 
 #endif
