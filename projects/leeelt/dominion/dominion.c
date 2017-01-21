@@ -772,38 +772,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     return -1;
 
   case mine:
-    j = state->hand[currentPlayer][choice1]; //store card we will trash
-
-    if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
-    {
-      return -1;
-    }
-
-    if (choice2 > treasure_map || choice2 < curse)
-    {
-      return -1;
-    }
-
-    if ((getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2))
-    {
-      return -1;
-    }
-
-    gainCard(choice2, state, 2, currentPlayer);
-
-    //discard card from hand
-    discardCard(handPos, currentPlayer, state, 0);
-
-    //discard trashed card
-    for (i = 0; i < state->handCount[currentPlayer]; i++)
-    {
-      if (state->hand[currentPlayer][i] == j)
-      {
-        discardCard(i, currentPlayer, state, 0);
-        break;
-      }
-    }
-
+    playMine(state, choice1, choice2, handPos);
     return 0;
 
   case remodel:
@@ -1491,5 +1460,47 @@ int playFeast(struct gameState *state, int choice1)
   //Reset Hand
 
   return 0;
+}
+
+
+int playMine(struct gameState *state, int choice1, int choice2, int handPos)
+{
+  int i;
+  int j;
+  int currentPlayer = state->whoseTurn;
+
+    j = state->hand[currentPlayer][choice1]; //store card we will trash
+
+    if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
+    {
+      return -1;
+    }
+
+    if (choice2 > treasure_map || choice2 < curse)
+    {
+      return -1;
+    }
+
+    if ((getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2))
+    {
+      return -1;
+    }
+
+    gainCard(choice2, state, 2, currentPlayer);
+
+    //discard card from hand
+    discardCard(handPos, currentPlayer, state, 0);
+
+    //discard trashed card
+    for (i = 0; i < state->handCount[currentPlayer]; i++)
+    {
+      if (state->hand[currentPlayer][i] == j)
+      {
+        discardCard(i, currentPlayer, state, 0);
+        break;
+      }
+    }
+
+    return 0;
 }
 //end of dominion.c
