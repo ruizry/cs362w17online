@@ -1208,16 +1208,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 }
 
 int playAdventurer(struct gameState *state){
-	//drawntreasure
-	//tempHand
-	//cardDrawn
+	
 	int currentPlayer = whoseTurn(state); 
 	int temphand[MAX_HAND];// moved above the if statement
   	int drawntreasure=0;
   	int cardDrawn;
   	int z = 0;// this is the counter for the temp hand
-
-
 
 	while(drawntreasure<2){
 		if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
@@ -1225,7 +1221,7 @@ int playAdventurer(struct gameState *state){
 		}
 		drawCard(currentPlayer, state);
 		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
-		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+		if (cardDrawn == copper || cardDrawn == silver) //Removed cardDrawn == gold
 	  		drawntreasure++;
 		else{
 	  		temphand[z]=cardDrawn;
