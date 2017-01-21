@@ -814,6 +814,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
     case smithy:
 	//Refactored to method
+	playSmithy(state, handPos);
       return 0;
 		
     case village:
@@ -1237,7 +1238,7 @@ int playSmithy(struct gameState *state, int handPos){
 	}
 			
       //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      discardCard(handPos, currentPlayer, state, 1); //changed trashInt from 0 to 1
 }
 
 int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
