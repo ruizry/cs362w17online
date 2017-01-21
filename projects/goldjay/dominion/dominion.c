@@ -818,14 +818,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-			
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+	//Refactored to a function
+	playVillage(state, handPos);
       return 0;
 		
     case baron:
@@ -1231,7 +1225,11 @@ int playAdventurer(struct gameState *state){
 }
 
 int playSmithy(struct gameState *state, int handPos){
-      //+3 Cards
+      
+	int currentPlayer = whoseTurn(state); 
+	int i;
+
+	//+3 Cards
       for (i = 0; i < 3; i++)
 	{
 	  drawCard(currentPlayer, state);
@@ -1239,7 +1237,36 @@ int playSmithy(struct gameState *state, int handPos){
 			
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 1); //changed trashInt from 0 to 1
+
+	return 0;
 }
+
+int playVillage(struct gameState *state, int handPos){
+
+      int currentPlayer = whoseTurn(state); 
+
+      //+1 Card
+      drawCard(currentPlayer, state);
+			
+      //+2 Actions
+      state->numActions = state->numActions + 2;
+			
+      //discard played card from hand
+      discardCard(handPos, currentPlayer, state, 0);
+
+	return 0;
+}
+
+int playFeast(struct gameState *state, int choice1){
+
+	return 0;
+}
+
+int playcouncil_Room(struct gameState *state, int handPos){
+
+	return 0;
+}
+
 
 int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
 {
