@@ -1391,7 +1391,7 @@ int playAdventurer(struct gameState *state, int currentPlayer)
 
   while (z - 1 >= 0)
   {
-    state->discard[currentPlayer][state->discardCount[currentPlayer]++] = tempHand[z - 1]; // discard all cards in play that have been drawn
+    state->discard[currentPlayer][state->discardCount[currentPlayer]++] = tempHand[z]; // discard all cards in play that have been drawn
     z = z - 1;
   }
 
@@ -1408,7 +1408,7 @@ int playSmithy(struct gameState *state, int handPos, int currentPlayer)
   }
 
   //discard card from hand
-  discardCard(handPos, currentPlayer, state, 0);
+  discardCard(handPos, currentPlayer, state, 1);
   return 0;
 }
 
@@ -1418,7 +1418,7 @@ int playVillage(struct gameState *state, int handPos, int currentPlayer)
   drawCard(currentPlayer, state);
 
   //+2 Actions
-  state->numActions = state->numActions + 2;
+  state->numActions = state->numActions * 2;
 
   //discard played card from hand
   discardCard(handPos, currentPlayer, state, 0);
@@ -1473,7 +1473,7 @@ int playFeast(struct gameState *state, int choice1, int currentPlayer)
         printf("Deck Count: %d\n", state->handCount[currentPlayer] + state->deckCount[currentPlayer] + state->discardCount[currentPlayer]);
       }
 
-      gainCard(choice1, state, 0, currentPlayer); //Gain the card
+      gainCard(choice1, state, 1, currentPlayer); //Gain the card
       x = 0;                                      //No more buying cards
 
       if (DEBUG)
@@ -1510,10 +1510,7 @@ int playCouncil_Room(struct gameState *state, int handPos, int currentPlayer)
   //Each other player draws a card
   for (i = 0; i < state->numPlayers; i++)
   {
-    if (i != currentPlayer)
-    {
-      drawCard(i, state);
-    }
+    drawCard(i, state);
   }
 
   //put played card in played card pile
