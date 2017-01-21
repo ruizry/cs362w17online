@@ -1352,6 +1352,8 @@ int smithy(struct gamestate* state, int handPos){
 			
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 0);
+
+      return 0;
  }
 //end of dominion.c
 
