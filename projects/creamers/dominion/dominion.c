@@ -664,27 +664,23 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   
   if (card == adventurer)
   {
-	playAdventurer(state);
-	return 0;
+	return playAdventurer(state);
   }
   else if (card == smithy)
   {
-	playSmithy(state, handPos);
-	return 0;
+	return playSmithy(state, handPos);
   }
   else if (card == council_room)
   {
-	playCouncil_Room(state, handPos);
-	return 0;
+	return playCouncil_Room(state, handPos);
   }
   else if (card == gardens)
   {
-	return -1;
+	return playGardens;
   }
   else if (card == village)
   {
-	playVillage(state, handPos);
-	return 0;
+	return playVillage(state, handPos);
   }
 	
   //uses switch to select card and perform actions
@@ -1355,6 +1351,11 @@ int playCouncil_Room(struct gameState *state, int handPos)
       discardCard(handPos, currentPlayer, state, 0);
 			
       return 0;
+}
+
+int playGardens(void)
+{
+	return -1;
 }
 
 int playVillage(struct gameState *state, int handPos)
