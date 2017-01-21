@@ -36,7 +36,7 @@ runtests: testDrawCard
 player: player.c interface.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o $(CFLAGS)
 
-all: playdom player testBuyCard
+all: playdom player
 
 clean:
 	rm -f *.o playdom test player testInit *.exe *.gcov *.gcda *.gcno *.so
