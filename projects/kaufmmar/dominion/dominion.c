@@ -5,8 +5,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-//Functions prototypes
-int playAdventurer( struct gameState *, int ); 
 
 int compare(const void* a, const void* b) {
   if (*(int*)a > *(int*)b)
@@ -669,8 +667,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   //uses switch to select card and perform actions
   switch( card ) 
     {
-    case adventurer:
-      playAdventurer(state,currentPlayer);
+    case adventurer: 
+        return playAdventurer (temphand,drawntreasure,cardDrawn, int z, struct gameState *state, int currentPlayer) ;
      
 			
     case council_room:
@@ -815,26 +813,12 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
-      //+3 Cards
-      for (i = 0; i < 3; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-      return 0;
+        return playSmithy(state, currentPlayer, handPos);
+      
+      
 		
     case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-			
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-      return 0;
+      return playVillage(state,currentPlayer,handPos); 
 		
     case baron:
       state->numBuys++;//Increase buys by 1!
@@ -1319,12 +1303,9 @@ int updateCoins(int player, struct gameState *state, int bonus)
 
 //Adventurer
 
-int playAdventurer(struct gameState *state, int currentPlayer)
+int playAdventurer(int *temphand, int drawntreasure, int cardDrawn,z, state,currentPlayer); 
 { 
-    int temphand[MAX_HAND];
-    int cardDrawn; 
-    int drawntreasure = 0; 
-    int z = 0;
+    
     while(drawntreasure<2){
         if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
           shuffle(currentPlayer, state);
@@ -1344,6 +1325,33 @@ int playAdventurer(struct gameState *state, int currentPlayer)
         z=z-1;
           }
           return 0;
+}
+
+//Smithy
+int playSmithy (struct gameState * state, int currentPlayer, int handPos) { 
+    int i; 
+    for (i = 0; i < 3; i++)
+	{
+	  drawCard(currentPlayer, state);
+	}
+			
+      //discard card from hand
+      discardCard(handPos, currentPlayer, state, 0);
+      return 0;
+
+}
+
+//Village
+int playVillage(struct gameState *state, int currentPlayer, int handPos){
+//+1 Card
+      drawCard(currentPlayer, state);
+			
+      //+2 Actions
+      state->numActions = state->numActions + 2;
+			
+      //discard played card from hand
+      discardCard(handPos, currentPlayer, state, 0);
+      return 0;
 }
 
 
