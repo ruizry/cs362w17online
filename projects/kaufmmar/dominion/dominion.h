@@ -141,5 +141,6 @@ int playCouncil_Room(struct gameState *state, int handPos);
 int playAdventurer(int *temphand, int drawntreasure, int cardDrawn, int z, struct gameState *state, int currentPlayer); 
 int playSmithy (struct gameState * state, int currentPlayer, int handPos); 
 int playVillage(struct gameState *state, int currentPlayer, int handPos); 
+int playCouncil_Room(struct gameState * state, int currentPlayer, int handPos); 
 
 #endif

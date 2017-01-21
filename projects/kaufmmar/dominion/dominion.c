@@ -672,28 +672,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
      
 			
     case council_room:
-      //+4 Cards
-      for (i = 0; i < 4; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //+1 Buy
-      state->numBuys++;
-			
-      //Each other player draws a card
-      for (i = 0; i < state->numPlayers; i++)
-	{
-	  if ( i != currentPlayer )
-	    {
-	      drawCard(i, state);
-	    }
-	}
-			
-      //put played card in played card pile
-      discardCard(handPos, currentPlayer, state, 0);
-			
-      return 0;
+        return playCouncil_Room(state,currentPlayer,handPos); 
+      
 			
     case feast:
       //gain card with cost up to 5
@@ -1353,6 +1333,33 @@ int playVillage(struct gameState *state, int currentPlayer, int handPos){
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
 }
+
+//Council Room
+int playCouncil_Room(struct gameState * state, int currentPlayer, int handPos) { 
+    int i; 
+    //+4 Cards
+      for (i = 0; i < 4; i++)
+	{
+	  drawCard(currentPlayer, state);
+	}
+			
+      //+1 Buy
+      state->numBuys++;
+			
+      //Each other player draws a card
+      for (i = 0; i < state->numPlayers; i++)
+	{
+	  if ( i != currentPlayer )
+	    {
+	      drawCard(i, state);
+	    }
+	}
+			
+      //put played card in played card pile
+      discardCard(handPos, currentPlayer, state, 0);
+			
+      return 0;
+      }
 
 
 //end of dominion.c
