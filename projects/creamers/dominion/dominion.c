@@ -677,6 +677,15 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	playCouncil_Room(state, handPos);
 	return 0;
   }
+  else if (card == gardens)
+  {
+	return -1;
+  }
+  else if (card == village)
+  {
+	playVillage(state, handPos);
+	return 0;
+  }
 	
   //uses switch to select card and perform actions
   switch( card ) 
@@ -734,10 +743,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       //Reset Hand
       			
       return 0;
-			
-    case gardens:
-      return -1;
-			
+				
     case mine:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
 
@@ -797,17 +803,6 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	}
 
 
-      return 0;
-		
-    case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-			
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
     case baron:
@@ -1362,5 +1357,18 @@ int playCouncil_Room(struct gameState *state, int handPos)
       return 0;
 }
 
+int playVillage(struct gameState *state, int handPos)
+{
+  int currentPlayer = whoseTurn(state);
+   //+1 Card
+  drawCard(currentPlayer, state);
+		
+  //+2 Actions
+  state->numActions = state->numActions + 2;
+		
+  //discard played card from hand
+  discardCard(handPos, currentPlayer, state, 0);
+  return 0;
+}
 //end of dominion.c
 
