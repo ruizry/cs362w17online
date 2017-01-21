@@ -672,35 +672,16 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	playSmithy(state, handPos);
 	return 0;
   }
+  else if (card == council_room)
+  {
+	playCouncil_Room(state, handPos);
+	return 0;
+  }
 	
   //uses switch to select card and perform actions
   switch( card ) 
     {
-  		
-    case council_room:
-      //+4 Cards
-      for (i = 0; i < 4; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //+1 Buy
-      state->numBuys++;
-			
-      //Each other player draws a card
-      for (i = 0; i < state->numPlayers; i++)
-	{
-	  if ( i != currentPlayer )
-	    {
-	      drawCard(i, state);
-	    }
-	}
-			
-      //put played card in played card pile
-      discardCard(handPos, currentPlayer, state, 0);
-			
-      return 0;
-			
+   
     case feast:
       //gain card with cost up to 5
       //Backup hand
@@ -1354,6 +1335,32 @@ int playSmithy(struct gameState *state, int handPos)
 	return 0;
 }
 
+int playCouncil_Room(struct gameState *state, int handPos)
+{
+	int i, currentPlayer = whoseTurn(state);
+      //+4 Cards
+      for (i = 0; i < 4; i++)
+	{
+	  drawCard(currentPlayer, state);
+	}
+			
+      //+1 Buy
+      state->numBuys++;
+			
+      //Each other player draws a card
+      for (i = 0; i < state->numPlayers; i++)
+	{
+	  if ( i != currentPlayer )
+	    {
+	      drawCard(i, state);
+	    }
+	}
+			
+      //put played card in played card pile
+      discardCard(handPos, currentPlayer, state, 0);
+			
+      return 0;
+}
 
 //end of dominion.c
 
