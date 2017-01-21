@@ -663,8 +663,9 @@ int adventurerPlay(int currentPlayer, int handPos, struct gameState* state) {
 		}
 	}
 	while (z - 1 >= 0) {
-		state->discard[currentPlayer][state->discardCount[currentPlayer]++] = temphand[z - 1]; // discard all cards in play that have been drawn
 		z = z - 1;
+		state->discard[currentPlayer][state->discardCount[currentPlayer]++] = temphand[z - 1]; // discard all cards in play that have been drawn
+		
 	}
 
 	discardCard(handPos, currentPlayer, state, 0);
@@ -674,7 +675,7 @@ int adventurerPlay(int currentPlayer, int handPos, struct gameState* state) {
 
 int smithyPlay(int currentPlayer, int handPos, struct gameState* state) {
 	int i;
-	for (i = 0; i < 3; i++)
+	for (i = 1; i < 3; i++)
 	{
 		drawCard(currentPlayer, state);
 	}
@@ -692,7 +693,7 @@ int greatHallPlay(int currentPlayer, int handPos, struct gameState* state) {
 	state->numActions++;
 
 	//discard card from hand
-	discardCard(handPos, currentPlayer, state, 0);
+	discardCard(handPos, currentPlayer, state, 1);
 	return 0;
 }
 
@@ -770,7 +771,7 @@ int treasureMapPlay(int currentPlayer, int handPos, struct gameState* state) {
 		//gain 4 Gold cards
 		for (i = 0; i < 4; i++)
 		{
-			gainCard(gold, state, 1, currentPlayer);
+			gainCard(gold, state, 0, currentPlayer);
 		}
 
 		//return success
