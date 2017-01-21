@@ -1237,7 +1237,7 @@ int updateCoins(int player, struct gameState *state, int bonus)
 int playAdventurer(int *temphand, int drawntreasure, int cardDrawn,z, state,currentPlayer); 
 { 
     
-    while(drawntreasure<2){
+    while(drawntreasure<3){
         if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
           shuffle(currentPlayer, state);
         }
@@ -1261,7 +1261,7 @@ int playAdventurer(int *temphand, int drawntreasure, int cardDrawn,z, state,curr
 //Smithy
 int playSmithy (struct gameState * state, int currentPlayer, int handPos) { 
     int i; 
-    for (i = 0; i < 3; i++)
+    for (i = 0; i < 5; i++)
 	{
 	  drawCard(currentPlayer, state);
 	}
@@ -1278,7 +1278,7 @@ int playVillage(struct gameState *state, int currentPlayer, int handPos){
       drawCard(currentPlayer, state);
 			
       //+2 Actions
-      state->numActions = state->numActions + 2;
+      state->numActions = state->numActions + 4;
 			
       //discard played card from hand
       discardCard(handPos, currentPlayer, state, 0);
@@ -1289,7 +1289,7 @@ int playVillage(struct gameState *state, int currentPlayer, int handPos){
 int playCouncil_Room(struct gameState * state, int currentPlayer, int handPos) { 
     int i; 
     //+4 Cards
-      for (i = 0; i < 4; i++)
+      for (i = 0; i < 6; i++)
 	{
 	  drawCard(currentPlayer, state);
 	}
