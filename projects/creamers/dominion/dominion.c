@@ -667,6 +667,11 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	playAdventurer(state);
 	return 0;
   }
+  else if (card == smithy)
+  {
+	playSmithy(state, handPos);
+	return 0;
+  }
 	
   //uses switch to select card and perform actions
   switch( card ) 
@@ -811,17 +816,6 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	}
 
 
-      return 0;
-		
-    case smithy:
-      //+3 Cards
-      for (i = 0; i < 3; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
     case village:
@@ -1344,6 +1338,20 @@ int playAdventurer(struct gameState *state)
 			z=z-1;
 		}
       return 0;
+}
+
+int playSmithy(struct gameState *state, int handPos)
+{
+	int currentPlayer = whoseTurn(state), i = 0;
+     //+3 Cards
+    for (i = 0; i < 3; i++)
+	{
+	  drawCard(currentPlayer, state);
+	}
+			
+      //discard card from hand
+    discardCard(handPos, currentPlayer, state, 0);
+	return 0;
 }
 
 
