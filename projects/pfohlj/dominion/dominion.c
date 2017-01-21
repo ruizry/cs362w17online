@@ -1400,6 +1400,7 @@ int playAdventurer(struct gameState *state, int currentPlayer)
 
 int playSmithy(struct gameState *state, int handPos, int currentPlayer)
 {
+  int i;
   //+3 Cards
   for (i = 0; i < 3; i++)
   {
