@@ -5,7 +5,7 @@ int playSmithy(struct gameState* state, int handPos) {
 		drawCard(currentPlayer, state)
 	}
 
-	discardCard(handPos, currentPlayer, state, 1); // **BUG**: trashing card, originally last argument == 0
+	discardCard(handPos, currentPlayer, state, 1); 
 	return 0;
 }
 
@@ -17,7 +17,6 @@ int playAdventurer(struct gameState* state) {
 	int temphand[MAX_HAND];
 
 	while (drawntreasure < 2) {
-		// BUG: shuffling at <= 1, should be for < 1 only
 		if (state->deckCount[currentPlayer] <= 1) { //if the deck is empty we need to shuffle discard and add to deck
 			shuffle(currentPlayer, state);
 		}
@@ -50,8 +49,6 @@ int playVillage(struct gameState* state, int handPos) {
 	drawCard(currentPlayer, state);
 
 	//+2 Actions
-
-	//**BUG**: adding only 1 action, should + 2
 	
 	state->numActions = state->numActions + 1;
 
@@ -85,8 +82,6 @@ int playFeast(struct gameState* state, int choice1) {
 			}
 		}
 
-		// **BUG**: Card too expensive if player has the right amount of money, should be < getCost(choice1)
-
 		else if (state->coins <= getCost(choice1)) {
 			printf("That card is too expensive!\n");
 
@@ -99,8 +94,6 @@ int playFeast(struct gameState* state, int choice1) {
 			if (DEBUG) {
 				printf("Deck Count: %d\n", state->handCount[currentPlayer] + state->deckCount[currentPlayer] + state->discardCount[currentPlayer]);
 			}
-
-			// **BUG**: does not send gained card to discard pile (arg 0), but to hand (arg 2)
 
 			gainCard(choice1, state, 2, currentPlayer);//Gain the card
 			x = 0;//No more buying cards
