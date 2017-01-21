@@ -27,6 +27,12 @@ testAll: dominion.o testSuite.c
 interface.o: interface.h interface.c
 	gcc -c interface.c -g  $(CFLAGS)
 
+refactor.o: dominion.h refactor.c rngs.o
+	gcc -c refactor.c -g $(CFLAGS)
+
+refactorPlaydom: refactor.o
+	gcc -o refactorPlaydom playdom.c -g refactor.o rngs.o $(CFLAGS)
+
 runtests: testDrawCard 
 	./testDrawCard &> unittestresult.out
 	gcov dominion.c >> unittestresult.out

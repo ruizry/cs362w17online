@@ -1,4 +1,5 @@
 #include "dominion.h"
+#include <math.h>
 #include "dominion_helpers.h"
 #include <string.h>
 #include <stdio.h>
