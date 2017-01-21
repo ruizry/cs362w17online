@@ -1173,7 +1173,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 }
 
 //new adventurer function
-int adventureCard(struct gameState *state, int drawntreasure, int currentPlayer, int *temphand, int cardDrawn, int z) {
+int adventurerCard(struct gameState *state, int drawntreasure, int currentPlayer, int *temphand, int cardDrawn, int z) {
   while(drawntreasure<2) {
     if (state->deckCount[currentPlayer] <= 1){
       shuffle(currentPlayer, state);
