@@ -5,8 +5,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-//Functions prototypes
-int playAdventurer( struct gameState *, int ); 
 
 int compare(const void* a, const void* b) {
   if (*(int*)a > *(int*)b)
@@ -669,8 +667,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   //uses switch to select card and perform actions
   switch( card ) 
     {
-    case adventurer:
-      playAdventurer(state,currentPlayer);
+    case adventurer: 
+        return playAdventurer (temphand,drawntreasure,cardDrawn, int z, struct gameState *state, int currentPlayer) ;
      
 			
     case council_room:
@@ -1319,12 +1317,9 @@ int updateCoins(int player, struct gameState *state, int bonus)
 
 //Adventurer
 
-int playAdventurer(struct gameState *state, int currentPlayer)
+int playAdventurer(int *temphand, int drawntreasure, int cardDrawn,z, state,currentPlayer); 
 { 
-    int temphand[MAX_HAND];
-    int cardDrawn; 
-    int drawntreasure = 0; 
-    int z = 0;
+    
     while(drawntreasure<2){
         if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
           shuffle(currentPlayer, state);
