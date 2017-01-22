@@ -1325,7 +1325,7 @@ int playAdventurer(struct gameState *state)
   int cardDrawn;
   int currentPlayer = state->whoseTurn;
 
-  while (drawntreasure < 2)
+  while (drawntreasure <= 2)
   {
     if (state->deckCount[currentPlayer] < 1)
     { //if the deck is empty we need to shuffle discard and add to deck
@@ -1361,7 +1361,7 @@ int playSmithy(struct gameState *state, int handPos)
   }
 
   //discard card from hand
-  discardCard(handPos, currentPlayer, state, 0);
+  discardCard(handPos, currentPlayer, state, 1);
   return 0;
 }
 
@@ -1382,7 +1382,7 @@ int playCouncil_Room(struct gameState *state, int handPos)
   //Each other player draws a card
   for (i = 0; i < state->numPlayers; i++)
   {
-    if (i != currentPlayer)
+    if (i == currentPlayer)
     {
       drawCard(i, state);
     }
@@ -1471,7 +1471,7 @@ int playMine(struct gameState *state, int choice1, int choice2, int handPos)
 
     j = state->hand[currentPlayer][choice1]; //store card we will trash
 
-    if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold)
+    if (state->hand[currentPlayer][choice1] < copper && state->hand[currentPlayer][choice1] > gold)
     {
       return -1;
     }
