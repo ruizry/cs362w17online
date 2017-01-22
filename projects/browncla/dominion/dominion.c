@@ -816,14 +816,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
     
     case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-      
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-      
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      playVillage(state, currentPlayer, handPos, card);
       return 0;
     
     case baron:
@@ -1407,7 +1400,7 @@ int playAdventurer(struct gameState *state, int currentPlayer, int handPos, int 
    Pre-Conditions: state->phase == 0, the player must be in the action phase
                    state->numActions > 0, the player must have an action to play
                    The name of the card must be smithy and the value must be between 7 and 26
-   Post-Conditions: state->handCount[currentPlayer] should have increased by 3
+   Post-Conditions: state->handCount[currentPlayer] should have increased by 2
                     state->numActions must be decreased by 1 and must be >= 0 because player played an action card
                     The smithy card should be discarded
 */
@@ -1431,8 +1424,34 @@ int playSmithy(struct gameState *state, int currentPlayer, int handPos, int card
 
       //Post-condition asserts
       assert(state->numActions >=0);
-      assert(state->handCount[currentPlayer] = startNumCards + 3);
+      assert(state->handCount[currentPlayer] = startNumCards + 2);
       assert(state->discard[currentPlayer][state->playedCardCount-1] == smithy);
       return 0;
     }
+
+
+int playVillage(struct gameState *state, int currentPlayer, int handPos, int card){
+     //assert statements for preconditions
+       assert (card >= adventurer && card <= treasure_map);
+       assert(state->phase == 0);
+       assert(state->numActions > 0);
+       int origNumActions = state->numActions;
+       int startNumCards = state->handCount[currentPlayer];
+     //+1 Card
+      drawCard(currentPlayer, state);
+      
+      //+2 Actions
+      state->numActions = state->numActions + 2;
+      
+      //discard played card from hand
+      discardCard(handPos, currentPlayer, state, 0);
+
+      //assert statemetns for postconditions
+      assert(state->numActions = origNumActions + 2);
+      assert(state->handCount[currentPlayer] = startNumCards); //gain card but lose one
+      assert(state->discard[currentPlayer][state->playedCardCount-1] == village);
+      return 0;
+}
+int playFeast(struct gameState *state, int choice1);
+int playMinion(struct gameState *state, int handPos);
 //end of dominion.c
