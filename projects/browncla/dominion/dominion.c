@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <assert.h>
 
 int compare(const void* a, const void* b) {
   if (*(int*)a > *(int*)b)
@@ -34,6 +35,10 @@ int* kingdomCards(int k1, int k2, int k3, int k4, int k5, int k6, int k7,
   return k;
 }
 
+
+//Sets up random number generator, checks that there is an appropriate number
+// of players (returns -1 if not), selects unique kingdom cards, sets numbers
+// of cards
 int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 		   struct gameState *state) {
 
@@ -102,7 +107,7 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
   state->supplyCount[silver] = 40;
   state->supplyCount[gold] = 30;
 
-  //set number of Kingdom cards
+  //set number of Kingdom cards, treasure_map = 26, adventurer = 7
   for (i = adventurer; i <= treasure_map; i++)       	//loop all cards
     {
       for (j = 0; j < 10; j++)           		//loop chosen cards
@@ -159,17 +164,12 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 	}
     }
 
-  //draw player hands
+  //initialize player hands to 0
   for (i = 0; i < numPlayers; i++)
     {  
       //initialize hand size to zero
       state->handCount[i] = 0;
       state->discardCount[i] = 0;
-      //draw 5 cards
-      // for (j = 0; j < 5; j++)
-      //	{
-      //	  drawCard(i, state);
-      //	}
     }
   
   //set embargo tokens to 0 for all supply piles
@@ -186,7 +186,6 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
   state->playedCardCount = 0;
   state->whoseTurn = 0;
   state->handCount[state->whoseTurn] = 0;
-  //int it; move to top
 
   //Moved draw cards to here, only drawing at the start of a turn
   for (it = 0; it < 5; it++){
@@ -233,13 +232,13 @@ int playCard(int handPos, int choice1, int choice2, int choice3, struct gameStat
   int card;
   int coin_bonus = 0; 		//tracks coins gain from actions
 
-  //check if it is the right phase
+  //check if it is the right phase, -1 if not
   if (state->phase != 0)
     {
       return -1;
     }
 	
-  //check if player has enough actions
+  //check if player has enough actions and can play
   if ( state->numActions < 1 )
     {
       return -1;
@@ -652,6 +651,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   int index;
   int currentPlayer = whoseTurn(state);
   int nextPlayer = currentPlayer + 1;
+  int startNumCards;
 
   int tributeRevealedCards[2] = {-1, -1};
   int temphand[MAX_HAND];// moved above the if statement
@@ -666,26 +666,61 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   //uses switch to select card and perform actions
   switch( card ) 
     {
+
+      // TO DO DOCUMENTATION
+      /* Description: If adventurer card is drawn, the player keep drawing from their deck until two treasure 
+         cards are drawn and discards the rest of the drawn cards. In the implementation, first 
+         before a card is drawn, if the deck is empty, the discard pile is reshuffled into a deck that 
+         can be drawn from. Then a card is drawn and added to the hand of the current player and added to the top of 
+         the hand. If the card is one of the treasure values, copper, silver or gold,then the number 
+         of drawn treasures is incremented. Otherwise, the card is moved to a temporary hand
+         that is then later used to discard the cards. The adventurer card is discarded in the clean up phase.
+         Pre-Conditions: state->phase == 0, the player must be in the action phase
+                         state->numActions > 0, the player must have an action to play
+                         The name of the card must be adventurer and the value must be between 7 and 26
+
+         Post-Conditions: state->handCount[currentPlayer] should have increased by the number of drawn treasures up to 2 treasure cards
+                          state->numActions must be decreased by 1 and must be >= 0 because player played an action card
+                          The adventurer card should be discarded
+      */
     case adventurer:
+       //assert statements for preconditions
+       assert (card >= adventurer && card <= treasure_map);
+       assert(state->phase == 0);
+       assert(state->numActions > 0);
+       startNumCards = state->handCount[currentPlayer]; // storing the starting number of cards for test
+       
+      // drawn treasure is the number of cards that have been drawn that are treasure cards
+      // keep going until 2 treasure cards are drawn
       while(drawntreasure<2){
-	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
-	  shuffle(currentPlayer, state);
-	}
-	drawCard(currentPlayer, state);
-	cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
-	if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
-	  drawntreasure++;
-	else{
-	  temphand[z]=cardDrawn;
-	  state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
-	  z++;
-	}
+        //if the deck is empty we need to shuffle discard and add to deck
+      	if (state->deckCount[currentPlayer] <1){
+      	  shuffle(currentPlayer, state);
+      	}
+      	drawCard(currentPlayer, state);
+      	cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
+      	if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+      	  drawntreasure++;
+      	else{
+      	  temphand[z]=cardDrawn; //storing the non-treasure drawn card in a temporary hand to discard before continuing play
+      	  state->handCount[currentPlayer]--; //removing the non-treasure card from the current hand
+      	  z++;
+      	}
       }
+      //discarding the non-treasure cards that were drawn. 
       while(z-1>=0){
-	state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
-	z=z-1;
+      	state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn 
+      	z=z-1;
       }
-      return 0;
+
+      discardCard(handPos, currentPlayer, state, 0); // discard the adventure card since it has been played
+
+      //Post-condition asserts
+      assert(state->numActions >=0);
+      assert(state->handCount[currentPlayer] = startNumCards + drawntreasure);
+      assert(state->discard[currentPlayer][state->playedCardCount-1] == adventurer);
+
+    return 0;
 			
     case council_room:
       //+4 Cards
@@ -827,16 +862,39 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 
       return 0;
-		
+		//TO DO DOCUMENTATION
+    /* Description: If a player plays a smithy card, the player draws three cards from his deck. The player
+       does not need to discard these cards until the clean up phase. He may use the cards to buy items
+       unless he has another action left. 
+       Pre-Conditions: state->phase == 0, the player must be in the action phase
+                       state->numActions > 0, the player must have an action to play
+                       The name of the card must be smithy and the value must be between 7 and 26
+
+       Post-Conditions: state->handCount[currentPlayer] should have increased by 3
+                        state->numActions must be decreased by 1 and must be >= 0 because player played an action card
+                        The smithy card should be discarded
+
+    */
     case smithy:
+      //Pre-condition asserts
+      assert (card >= adventurer && card <= treasure_map);
+      assert(state->phase == 0);
+      assert(state->numActions > 0);
+
+      startNumCards = state->handCount[currentPlayer];
       //+3 Cards
       for (i = 0; i < 3; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //discard card from hand
+      	{
+      	  drawCard(currentPlayer, state);
+      	}
+      			
+      //discard smithy card from hand
       discardCard(handPos, currentPlayer, state, 0);
+
+      //Post-condition asserts
+      assert(state->numActions >=0);
+      assert(state->handCount[currentPlayer] = startNumCards + 3);
+      assert(state->discard[currentPlayer][state->playedCardCount-1] == smithy);
       return 0;
 		
     case village:
@@ -1223,18 +1281,36 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   return -1;
 }
 
+
+//TO DO DOCUMENTATION
+/* Description: The discardCard function removes a card from the players hand and either
+   places it in the discard pile or trashes it. The discard pile is a pile of cards that
+   the player can use again while the trash pile means that the cards cannot be played again.
+   If the trashFlag is less than one, the card is simply discarded. If the trashFlag is 1 or 
+   greater, then the card is trashed. 
+
+       Pre-Conditions: state->handCount[currentPlayer] > handPos, the card must be in a valid position in the player hand 
+
+       Post-Conditions: The player has one less card in their hand
+                        If trashFlag >=1 then the discard pile did not gain a card
+                        If trashFlag < 1 then the discard pile gains a card
+
+    */
 int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
 {
-	
-  //if card is not trashed, added to Played pile 
+  //Pre-Condition asserts
+	assert(state->handCount[currentPlayer] > handPos);
+  int origCardCount;
+  //if card is discarded, added to Played pile before removing from hand
   if (trashFlag < 1)
     {
-      //add card to played pile
-      state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos]; 
-      state->playedCardCount++;
+      origCardCount = state->playedCardCount;
+      //add card to discard pile
+      state->discard[currentPlayer][state->playedCardCount] = state->hand[currentPlayer][handPos]; 
+      state->playedCardCount++; //increasing the played card count...this is wrong but works for now
     }
 	
-  //set played card to -1
+  //set played card to -1 to remove from hand of grid of hands for all players
   state->hand[currentPlayer][handPos] = -1;
 	
   //remove card from player's hand
@@ -1257,9 +1333,17 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
       //reduce number of cards in hand
       state->handCount[currentPlayer]--;
     }
-	
+  //Post-condition assert statements
+    //if discarded, discard pile must have gained one
+	if (trashFlag < 1){
+    assert(state->playedCardCount = 1 + origCardCount);
+  }
+  // if trashed, discard pile has same number of cards
+  else
+    assert(state->playedCardCount = origCardCount);
   return 0;
 }
+
 
 int gainCard(int supplyPos, struct gameState *state, int toFlag, int player)
 {
@@ -1298,8 +1382,20 @@ int gainCard(int supplyPos, struct gameState *state, int toFlag, int player)
   return 0;
 }
 
+//TO DO DOCUMENTATION
+/* Description: The updateCoins function sets number of coins currently in the players hand to 0.
+                Then the function counts the number of treasure cards in the hand and adds the appropriate
+                values to the number of coins the player currently has available.
+
+       Pre-Conditions: The player has cards in their hand
+
+       Post-Conditions: The player has 0 or more coins stored in coins variable of the struct
+
+    */
 int updateCoins(int player, struct gameState *state, int bonus)
 {
+  //Pre-condition asserts
+  assert(state->handCount[player] > 0);
   int i;
 	
   //reset coin count
@@ -1308,22 +1404,28 @@ int updateCoins(int player, struct gameState *state, int bonus)
   //add coins for each Treasure card in player's hand
   for (i = 0; i < state->handCount[player]; i++)
     {
+      //If the card is copper, add 1 to the number of coins
       if (state->hand[player][i] == copper)
-	{
-	  state->coins += 1;
-	}
+    	{
+    	  state->coins += 1;
+    	}
+      //If the card is silver, add 2 to the number of coins
       else if (state->hand[player][i] == silver)
-	{
-	  state->coins += 2;
-	}
+    	{
+    	  state->coins += 2;
+    	}
+      //If the card is gold, add 2 to the number of coins
       else if (state->hand[player][i] == gold)
-	{
-	  state->coins += 3;
-	}	
+    	{
+    	  state->coins += 3;
+    	}	
     }	
 
   //add bonus
   state->coins += bonus;
+
+  //Post-condition assertions
+  assert(state->coins > 0);
 
   return 0;
 }
