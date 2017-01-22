@@ -662,20 +662,26 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     nextPlayer = 0;
   }
   
+  //refactored cards
   if (card == adventurer)
   {
-	playAdventurer(state);
-	return 0;
+	return playAdventurer(state);
   }
   else if (card == smithy)
   {
-	playSmithy(state, handPos);
-	return 0;
+	return playSmithy(state, handPos);
   }
   else if (card == council_room)
   {
-	playCouncil_Room(state, handPos);
-	return 0;
+	return playCouncil_Room(state, handPos);
+  }
+  else if (card == gardens)
+  {
+	return playGardens();
+  }
+  else if (card == village)
+  {
+	return playVillage(state, handPos);
   }
 	
   //uses switch to select card and perform actions
@@ -734,10 +740,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       //Reset Hand
       			
       return 0;
-			
-    case gardens:
-      return -1;
-			
+				
     case mine:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
 
@@ -797,17 +800,6 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	}
 
 
-      return 0;
-		
-    case village:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+2 Actions
-      state->numActions = state->numActions + 2;
-			
-      //discard played card from hand
-      discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
     case baron:
@@ -1301,7 +1293,7 @@ int playAdventurer(struct gameState *state)
 		  shuffled = 1;
 		}
 		drawCard(currentPlayer, state);
-		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
+		cardDrawn = copper;//top card of hand is most recently drawn card.
 		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
 		{
 		  drawnTreasures++;
@@ -1323,7 +1315,7 @@ int playAdventurer(struct gameState *state)
 
 int playSmithy(struct gameState *state, int handPos)
 {
-	int currentPlayer = whoseTurn(state), i = 0;
+	int currentPlayer = whoseTurn(state) + 1, i = 0;
      //+3 Cards
     for (i = 0; i < 3; i++)
 	{
@@ -1350,7 +1342,7 @@ int playCouncil_Room(struct gameState *state, int handPos)
       //Each other player draws a card
       for (i = 0; i < state->numPlayers; i++)
 	{
-	  if ( i != currentPlayer )
+	  if ( i == currentPlayer )
 	    {
 	      drawCard(i, state);
 	    }
@@ -1362,5 +1354,23 @@ int playCouncil_Room(struct gameState *state, int handPos)
       return 0;
 }
 
+int playGardens(void)
+{
+	return -1;
+}
+
+int playVillage(struct gameState *state, int handPos)
+{
+  int currentPlayer = whoseTurn(state);
+   //+1 Card
+  drawCard(currentPlayer, state);
+		
+  //+2 Actions
+  state->numActions = state->numActions + 2;
+		
+  //discard played card from hand
+  discardCard(currentPlayer, currentPlayer, state, 0);
+  return 0;
+}
 //end of dominion.c
 
