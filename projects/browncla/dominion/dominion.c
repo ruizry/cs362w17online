@@ -667,7 +667,6 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
 
-      // TO DO DOCUMENTATION
     case adventurer: 
     playAdventurer(state, currentPlayer, handPos, card); 
     return 0;
@@ -812,37 +811,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 
       return 0;
-    //TO DO DOCUMENTATION
-    /* Description: If a player plays a smithy card, the player draws three cards from his deck. The player
-       does not need to discard these cards until the clean up phase. He may use the cards to buy items
-       unless he has another action left. 
-       Pre-Conditions: state->phase == 0, the player must be in the action phase
-                       state->numActions > 0, the player must have an action to play
-                       The name of the card must be smithy and the value must be between 7 and 26
-       Post-Conditions: state->handCount[currentPlayer] should have increased by 3
-                        state->numActions must be decreased by 1 and must be >= 0 because player played an action card
-                        The smithy card should be discarded
-    */
     case smithy:
-      //Pre-condition asserts
-      assert (card >= adventurer && card <= treasure_map);
-      assert(state->phase == 0);
-      assert(state->numActions > 0);
-
-      startNumCards = state->handCount[currentPlayer];
-      //+3 Cards
-      for (i = 0; i < 3; i++)
-        {
-          drawCard(currentPlayer, state);
-        }
-            
-      //discard smithy card from hand
-      discardCard(handPos, currentPlayer, state, 0);
-
-      //Post-condition asserts
-      assert(state->numActions >=0);
-      assert(state->handCount[currentPlayer] = startNumCards + 3);
-      assert(state->discard[currentPlayer][state->playedCardCount-1] == smithy);
+      playSmithy(state, currentPlayer, handPos, card);
       return 0;
     
     case village:
@@ -1429,4 +1399,40 @@ int playAdventurer(struct gameState *state, int currentPlayer, int handPos, int 
       assert(state->handCount[currentPlayer] = startNumCards + drawntreasure);
       assert(state->discard[currentPlayer][state->playedCardCount-1] == adventurer);
 }
+
+
+/* Description: If a player plays a smithy card, the player draws three cards from his deck. The player
+   does not need to discard these cards until the clean up phase. He may use the cards to buy items
+   unless he has another action left. 
+   Pre-Conditions: state->phase == 0, the player must be in the action phase
+                   state->numActions > 0, the player must have an action to play
+                   The name of the card must be smithy and the value must be between 7 and 26
+   Post-Conditions: state->handCount[currentPlayer] should have increased by 3
+                    state->numActions must be decreased by 1 and must be >= 0 because player played an action card
+                    The smithy card should be discarded
+*/
+
+int playSmithy(struct gameState *state, int currentPlayer, int handPos, int card){
+
+      //Pre-condition asserts
+      assert (card >= adventurer && card <= treasure_map);
+      assert(state->phase == 0);
+      assert(state->numActions > 0);
+      int i;
+      int startNumCards = state->handCount[currentPlayer];
+      //+3 Cards
+      for (i = 0; i < 3; i++)
+        {
+          drawCard(currentPlayer, state);
+        }
+            
+      //discard smithy card from hand
+      discardCard(handPos, currentPlayer, state, 0);
+
+      //Post-condition asserts
+      assert(state->numActions >=0);
+      assert(state->handCount[currentPlayer] = startNumCards + 3);
+      assert(state->discard[currentPlayer][state->playedCardCount-1] == smithy);
+      return 0;
+    }
 //end of dominion.c
